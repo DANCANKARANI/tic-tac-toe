@@ -15,9 +15,23 @@ replayBtn = resultBox.querySelector("button");
 let xWins = localStorage.getItem('xWins') ? parseInt(localStorage.getItem('xWins')) : 0;
 let oWins = localStorage.getItem('oWins') ? parseInt(localStorage.getItem('oWins')) : 0;
 
+// Get the "Player vs Player" button
+const selectBtnPvP = selectBox.querySelector(".options .playerVsPlayer");
+
+// Track if the game is in Player vs Player mode
+let isPvPMode = false;
+
+selectBtnPvP.onclick = () => {
+    selectBox.classList.add("hide");
+    playBoard.classList.add("show");
+    isPvPMode = true;  // Set PvP mode to true
+};
+
+
 // Display initial values
 document.getElementById('xWins').textContent = xWins;
 document.getElementById('oWins').textContent = oWins;
+
 
 // Function to increment and store wins
 function updateWinCounter(winner) {
@@ -41,9 +55,10 @@ function displayWinCounter() {
 replayBtn.addEventListener('click', () => {
     // Reset game board and any necessary game logic here
     allBox.forEach(box => {
-        box.innerHTML = '';      // Clear box contents
-        box.removeAttribute('id'); // Remove 'X' or 'O' identifier
+        box.innerHTML = '';              // Clear box contents
+        box.removeAttribute('id');       // Remove 'X' or 'O' identifier
         box.style.pointerEvents = 'auto'; // Make box clickable again
+        box.style.backgroundColor = '';  // Clear background color
     });
 
     // Hide the result box and show the play board again
@@ -58,12 +73,15 @@ replayBtn.addEventListener('click', () => {
 });
 
 
-window.onload = ()=>{
-    // make sure all the boxes in the board are clickable
+window.onload = () => {
+    resetWinCounter();  // Reset win counters to zero on page reload
+
+    // Make sure all the boxes in the board are clickable
     for (let i = 0; i < allBox.length; i++) {
        allBox[i].setAttribute("onclick", "clickedBox(this)");
     }
 }
+
 
 selectBtnX.onclick = ()=>{
     selectBox.classList.add("hide");
@@ -76,41 +94,59 @@ selectBtnO.onclick = ()=>{
     players.setAttribute("class", "players active player");
 }
 
-let playerXIcon = "fas fa-times", playerOIcon = "far fa-circle", playerSign = "X", runBot = true;
+let playerXIcon = "fas fa-chess-knight";   // Player X could be a dragon icon
+let playerOIcon = "fas fa-sun";  // Player O could be a feather icon
+let playerSign = "X", runBot = true;
 
 // user interaction with the board
 // Reference to the move sound
 const moveSound = document.getElementById("moveSound");
 const winSound = document.getElementById("winSound");
+const drawSound = document.getElementById("drawSound");
 
 function clickedBox(element) {
-    if(players.classList.contains("player")){
-        playerSign = "O";
-        element.innerHTML = `<i class="${playerOIcon}"></i>`;
-        players.classList.remove("active");
-        element.setAttribute("id", playerSign);
+    // Set the background color after the click
+    element.style.backgroundColor = playerSign === "X" ? "#ffcccc" : "#cceeff"; // Colors can vary for X and O
+
+    // Check if it's Player vs Player mode
+    if (isPvPMode) {
+        if (playerSign === "X") {
+            element.innerHTML = `<i class="${playerXIcon}"></i>`;
+            element.setAttribute("id", "X");
+            playerSign = "O";
+            players.classList.add("active");
+        } else {
+            element.innerHTML = `<i class="${playerOIcon}"></i>`;
+            element.setAttribute("id", "O");
+            playerSign = "X";
+            players.classList.remove("active");
+        }
     } else {
-        playerSign = "X";
-        element.innerHTML = `<i class="${playerXIcon}"></i>`;
-        players.classList.add("active");
-        element.setAttribute("id", playerSign);
+        // Continue with the single-player logic
+        if (players.classList.contains("player")) {
+            playerSign = "O";
+            element.innerHTML = `<i class="${playerOIcon}"></i>`;
+            players.classList.remove("active");
+            element.setAttribute("id", "O");
+        } else {
+            playerSign = "X";
+            element.innerHTML = `<i class="${playerXIcon}"></i>`;
+            players.classList.add("active");
+            element.setAttribute("id", "X");
+        }
+        playBoard.style.pointerEvents = "none";
+        setTimeout(() => {
+            bot(runBot);
+        }, ((Math.random() * 1000) + 200).toFixed());
     }
 
-    // Play the move sound
     moveSound.play();
-
     selectWinner();
     element.style.pointerEvents = "none";
-    playBoard.style.pointerEvents = "none";
-
-    // Delay for AI's move
-    let randomTimeDelay = ((Math.random() * 1000) + 200).toFixed();
-    setTimeout(() => {
-        bot(runBot);
-    }, randomTimeDelay);
+    if (isPvPMode) {
+        playBoard.style.pointerEvents = "auto";
+    }
 }
-  
-// computer interaction with the board
 function bot(){
     let array = [];
     if(runBot){
@@ -196,9 +232,16 @@ function selectWinner() {
                 playBoard.classList.remove("show");
             }, 700);
              // Play the winning sound
-            winSound.play();
             wonText.textContent = "Match has been drawn!";
-
+            drawSound.play();
         }
     }
+}
+
+function resetWinCounter() {
+    xWins = 0;
+    oWins = 0;
+    localStorage.setItem('xWins', xWins);
+    localStorage.setItem('oWins', oWins);
+    displayWinCounter(); // Update the displayed values to show 0
 }

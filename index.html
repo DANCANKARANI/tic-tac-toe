@@ -8,21 +8,19 @@
     <!-- Favicon -->
     <link rel="icon" href="https://freepngimg.com/save/55655-gaming-download-hd-png/512x512" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-
 </head>
 <body>
     <!-- SELECT PLAYER BOX -->
     <div class="select-box">
         <header>Tic Tac Toe</header>
-        <div class="content">
-            <div class="title">Select which icon you want to be?</div>
+        <div class="select-box">
             <div class="options">
-                <button class="playerX">Player X</button>
-                <button class="playerO">Player O</button>
+                <button class="playerX">Play as X (Player vs AI)</button>
+                <button class="playerO">Play as O (Player vs AI)</button>
+                <button class="playerVsPlayer">Player vs Player</button>
             </div>
-        </div>
+        </div>        
     </div>
-
     
     <!-- LAYOUT/BOARD -->
     <div class="play-board">
@@ -52,10 +50,11 @@
             </section>
         </div>
     </div>
+    
     <div class="win-counter">
-        <h2>Win</h2>
-        <p><strong>X Wins:</strong> <span id="xWins">0</span></p>
-        <p><strong>O Wins:</strong> <span id="oWins">0</span></p>
+        <h2>Win </h2>
+        <p style="color: green;"><strong>X Wins:</strong> <span id="xWins" class="x-counter"><b>0</b></span></p>
+        <p style="color: red;"><strong>O Wins:</strong> <span id="oWins" class="o-counter"><b>0</b></span></p>
     </div>
 
     <!-- RESULT -->
@@ -70,6 +69,7 @@
     <!-- Move Sound -->
     <audio id="moveSound" src="move.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
+    <audio id="drawSound" src="draw.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
