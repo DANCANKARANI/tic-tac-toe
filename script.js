@@ -108,6 +108,39 @@ const winSound = document.getElementById("winSound");
 const drawSound = document.getElementById("drawSound");
 
 // Handle user interaction with the board
+let timer; // Timer variable
+const timeLimit = 10; // 10 seconds for each player
+let timeRemaining = timeLimit; // Time remaining for the current player's turn
+const timerDisplay = document.querySelector('.timer'); // Reference to timer display
+
+// Function to start the timer
+function startTimer() {
+    timeRemaining = timeLimit; // Reset time remaining
+    clearInterval(timer); // Clear any existing timer
+    timer = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.textContent = `Time left: ${timeRemaining} seconds`; // Update timer display
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            
+            declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
+        }
+    }, 1000);
+}
+
+// Function to declare the winner and update win counter
+function declareWinner(winner) {
+    runBot = false; // Stop bot from taking turns
+    updateWinCounter(winner); // Update the win counter
+    setTimeout(() => {
+        resultBox.classList.add("show");
+        playBoard.classList.remove("show");
+    }, 700);
+    winSound.play();
+    wonText.innerHTML = `Player ${winner}<br> wins the game by timeout!`;
+}
+
+// Modify the clickedBox function to reset the timer on each player move
 function clickedBox(element) {
     element.style.backgroundColor = playerSign === "X" ? "#ffcccc" : "#cceeff";
     element.innerHTML = `<i class="${playerSign === "X" ? playerXIcon : playerOIcon}"></i>`;
@@ -122,6 +155,7 @@ function clickedBox(element) {
     if (!resultBox.classList.contains("show")) {
         playerSign = playerSign === "X" ? "O" : "X";
         players.classList.toggle("active");
+        startTimer(); // Restart timer for the next player
     }
 
     // Enable next player or bot turn if in PvP or PvE mode
@@ -132,6 +166,13 @@ function clickedBox(element) {
         setTimeout(bot, ((Math.random() * 1000) + 200).toFixed()); // Let bot take turn if no winner
     }
 }
+
+// Update the onload event to start the timer for the first player
+window.onload = () => {
+    allBox.forEach(box => box.setAttribute("onclick", "clickedBox(this)"));
+    displayWinCounter();
+    startTimer(); // Start timer for the first player
+};
 
 function bot(){
     let array = [];
@@ -204,3 +245,4 @@ function resetWinCounter() {
     localStorage.setItem('oWins', oWins);
     displayWinCounter(); // Update the displayed values to show 0
 }
+
