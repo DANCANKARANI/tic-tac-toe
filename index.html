@@ -8,6 +8,22 @@
     <!-- Favicon -->
     <link rel="icon" href="https://freepngimg.com/save/55655-gaming-download-hd-png/512x512" sizes="16x16" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <style>
+        /* Additional CSS for positioning the labels */
+        .labels {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 14px;
+        }
+        .labels p {
+            display: flex;
+            align-items: center;
+        }
+        .labels i {
+            margin-right: 5px; /* Space between icon and text */
+        }
+    </style>
 </head>
 <body>
     <!-- SELECT PLAYER BOX -->
@@ -71,6 +87,12 @@
     <audio id="moveSound" src="move.mp3"></audio>
     <audio id="winSound" src="win.mp3"></audio>
     <audio id="drawSound" src="draw.mp3"></audio>
+
+    <!-- Labels for X and O with icons -->
+    <div class="labels">
+        <p><i class="fas fa-chess-knight"></i><strong>X:</strong> Chess Knight</p>
+        <p><i class="fas fa-sun"></i><strong>O:</strong> Sun</p>
+    </div>
 
     <script src="script.js"></script>
 </body>

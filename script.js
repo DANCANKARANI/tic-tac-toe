@@ -50,14 +50,6 @@ function displayWinCounter() {
 }
 
 // Reset win counters
-// Reset win counters
-resetCounterBtn.onclick = () => {
-    xWins = 0;
-    oWins = 0;
-    localStorage.setItem('xWins', xWins);
-    localStorage.setItem('oWins', oWins);
-    displayWinCounter();
-};
 function resetWinCounter() {
     xWins = 0;
     oWins = 0;
@@ -114,37 +106,27 @@ const drawSound = document.getElementById("drawSound");
 // Handle user interaction with the board
 function clickedBox(element) {
     element.style.backgroundColor = playerSign === "X" ? "#ffcccc" : "#cceeff";
-    if (isPvPMode) {
-        if (playerSign === "X") {
-            element.innerHTML = `<i class="${playerXIcon}"></i>`;
-            element.setAttribute("id", "X");
-            playerSign = "O";
-            players.classList.add("active");
-        } else {
-            element.innerHTML = `<i class="${playerOIcon}"></i>`;
-            element.setAttribute("id", "O");
-            playerSign = "X";
-            players.classList.remove("active");
-        }
-    } else {
-        if (players.classList.contains("player")) {
-            playerSign = "O";
-            element.innerHTML = `<i class="${playerOIcon}"></i>`;
-            players.classList.remove("active");
-            element.setAttribute("id", "O");
-        } else {
-            playerSign = "X";
-            element.innerHTML = `<i class="${playerXIcon}"></i>`;
-            players.classList.add("active");
-            element.setAttribute("id", "X");
-        }
-        playBoard.style.pointerEvents = "none";
-        setTimeout(() => bot(runBot), ((Math.random() * 1000) + 200).toFixed());
-    }
+    element.innerHTML = `<i class="${playerSign === "X" ? playerXIcon : playerOIcon}"></i>`;
+    element.setAttribute("id", playerSign);
+    element.style.pointerEvents = "none"; // Disable further clicks on the box
     moveSound.play();
+
+    // Check if this move results in a win
     selectWinner();
-    element.style.pointerEvents = "none";
-    if (isPvPMode) playBoard.style.pointerEvents = "auto";
+
+    // Switch player if no winner yet
+    if (!resultBox.classList.contains("show")) {
+        playerSign = playerSign === "X" ? "O" : "X";
+        players.classList.toggle("active");
+    }
+
+    // Enable next player or bot turn if in PvP or PvE mode
+    if (isPvPMode) {
+        playBoard.style.pointerEvents = "auto"; // Allows PvP continuation
+    } else if (runBot && !resultBox.classList.contains("show")) {
+        playBoard.style.pointerEvents = "none";
+        setTimeout(bot, ((Math.random() * 1000) + 200).toFixed()); // Let bot take turn if no winner
+    }
 }
 
 function bot(){
