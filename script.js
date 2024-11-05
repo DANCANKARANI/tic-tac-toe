@@ -20,6 +20,10 @@ const homeBtn = document.getElementById("homeBtn");
 // Track if the game is in Player vs Player mode
 let isPvPMode = false;
 
+//reset counter button
+// Add event listener to the reset counter button
+resetCounterBtn.addEventListener('click', resetWinCounter);
+
 // Set PvP mode on button click
 selectBtnPvP.onclick = () => {
     selectBox.classList.add("hide");
