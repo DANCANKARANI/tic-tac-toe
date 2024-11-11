@@ -15,6 +15,7 @@ const selectBox = document.querySelector(".select-box"),
 // Variables to track wins
 let xWins = localStorage.getItem('xWins') ? parseInt(localStorage.getItem('xWins')) : 0;
 let oWins = localStorage.getItem('oWins') ? parseInt(localStorage.getItem('oWins')) : 0;
+let gameEnded = false;
 
 // Get the "Player vs Player" button
 const selectBtnPvP = selectBox.querySelector(".options .playerVsPlayer");
@@ -130,6 +131,7 @@ const timerDisplay = document.querySelector('.timer'); // Reference to timer dis
 
 // Function to start the timer
 function startTimer() {
+   if (!gameEnded){
     timeRemaining = timeLimit; // Reset time remaining
     clearInterval(timer); // Clear any existing timer
     timer = setInterval(() => {
@@ -141,18 +143,31 @@ function startTimer() {
             declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
         }
     }, 1000);
+   }else{
+    timeRemaining = timeLimit; // Reset time remaining
+    clearInterval(timer); // Clear any existing timer
+    timer = setInterval(() => {
+        timeRemaining++;
+        timerDisplay.textContent = `Time left: ${timeRemaining} seconds`; // Update timer display
+        if (timeRemaining <= 0) {
+            clearInterval(timer);
+            
+            declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
+        }
+    }, 1000);
+   }
 }
 
 // Function to declare the winner and update win counter
 function declareWinner(winner) {
     runBot = false; // Stop bot from taking turns
-    clearInterval(timer)//stop the
     updateWinCounter(winner); // Update the win counter
     setTimeout(() => {
         resultBox.classList.add("show");
         playBoard.classList.remove("show");
     }, 700);
     winSound.play();
+    gameEnded=true;
     displayWinMessage(winner);
 }
 
@@ -232,6 +247,7 @@ function selectWinner() {
         checkIdSign(1, 4, 7, playerSign) || checkIdSign(2, 5, 8, playerSign) || checkIdSign(3, 6, 9, playerSign) ||
         checkIdSign(1, 5, 9, playerSign) || checkIdSign(3, 5, 7, playerSign)) {
         
+        clearInterval(timer);
         declareWinner(playerSign);
     } else {
         if ([...allBox].every(box => box.id)) {
