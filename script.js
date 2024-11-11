@@ -9,6 +9,9 @@ const selectBox = document.querySelector(".select-box"),
     wonText = resultBox.querySelector(".won-text"),
     replayBtn = resultBox.querySelector("button");
 
+    Xturn = document.querySelector(".Xturn")
+    Oturn = document.querySelector(".Oturn")
+
 // Variables to track wins
 let xWins = localStorage.getItem('xWins') ? parseInt(localStorage.getItem('xWins')) : 0;
 let oWins = localStorage.getItem('oWins') ? parseInt(localStorage.getItem('oWins')) : 0;
@@ -19,9 +22,10 @@ const resetCounterBtn = document.getElementById("resetCounterBtn");
 const homeBtn = document.getElementById("homeBtn");
 // Track if the game is in Player vs Player mode
 let isPvPMode = false;
+    Xturn.innerHTML = "Your turn";
+    Oturn.innerHTML="AI turn"
 
-//reset counter button
-// Add event listener to the reset counter button
+// Reset counter button
 resetCounterBtn.addEventListener('click', resetWinCounter);
 
 // Set PvP mode on button click
@@ -29,6 +33,8 @@ selectBtnPvP.onclick = () => {
     selectBox.classList.add("hide");
     playBoard.classList.add("show");
     isPvPMode = true;
+    Xturn.innerHTML = "X's turn";
+    Oturn.innerHTML="O's turn"
 };
 
 // Display initial values
@@ -60,6 +66,15 @@ function resetWinCounter() {
     localStorage.setItem('xWins', xWins);
     localStorage.setItem('oWins', oWins);
     displayWinCounter();
+}
+
+// Function to display the win message based on game mode and winner
+function displayWinMessage(winner) {
+    if (isPvPMode) {
+        wonText.innerHTML = `Player ${winner} won the game!`;
+    } else {
+        wonText.innerHTML = winner === 'X' ? "You won!" : "You lost.";
+    }
 }
 
 // Function to handle replay button without resetting win counter
@@ -131,16 +146,16 @@ function startTimer() {
 // Function to declare the winner and update win counter
 function declareWinner(winner) {
     runBot = false; // Stop bot from taking turns
+    clearInterval(timer)//stop the
     updateWinCounter(winner); // Update the win counter
     setTimeout(() => {
         resultBox.classList.add("show");
         playBoard.classList.remove("show");
     }, 700);
     winSound.play();
-    wonText.innerHTML = `Player ${winner}<br> wins the game by timeout!`;
+    displayWinMessage(winner);
 }
 
-// Modify the clickedBox function to reset the timer on each player move
 function clickedBox(element) {
     element.style.backgroundColor = playerSign === "X" ? "#ffcccc" : "#cceeff";
     element.innerHTML = `<i class="${playerSign === "X" ? playerXIcon : playerOIcon}"></i>`;
@@ -214,35 +229,23 @@ function checkIdSign(val1, val2, val3, sign){
 
 function selectWinner() {
     if (checkIdSign(1, 2, 3, playerSign) || checkIdSign(4, 5, 6, playerSign) || checkIdSign(7, 8, 9, playerSign) || 
-        checkIdSign(1, 4, 7, playerSign) || checkIdSign(2, 5, 8, playerSign) || checkIdSign(3, 6, 9, playerSign) || 
+        checkIdSign(1, 4, 7, playerSign) || checkIdSign(2, 5, 8, playerSign) || checkIdSign(3, 6, 9, playerSign) ||
         checkIdSign(1, 5, 9, playerSign) || checkIdSign(3, 5, 7, playerSign)) {
         
-        runBot = false;
-        bot(runBot);
-
-        winSound.play();
-        updateWinCounter(playerSign);
-        setTimeout(() => {
-            resultBox.classList.add("show");
-            playBoard.classList.remove("show");
-        }, 700);
-        wonText.innerHTML = `Player ${playerSign}<br> won the game!`;
-    } else if ([...allBox].every(box => box.id !== "")) {
-        runBot = false;
-        bot(runBot);
-        setTimeout(() => {
-            resultBox.classList.add("show");
-            playBoard.classList.remove("show");
-        }, 700);
-        wonText.textContent = "Match has been drawn!";
-        drawSound.play();
+        declareWinner(playerSign);
+    } else {
+        if ([...allBox].every(box => box.id)) {
+            drawSound.play();
+            playBoard.style.pointerEvents = "none";
+            setTimeout(() => {
+                resultBox.classList.add("show");
+                playBoard.classList.remove("show");
+            }, 700);
+            wonText.innerHTML = "Match has been drawn!";
+        }
     }
 }
-function resetWinCounter() {
-    xWins = 0;
-    oWins = 0;
-    localStorage.setItem('xWins', xWins);
-    localStorage.setItem('oWins', oWins);
-    displayWinCounter(); // Update the displayed values to show 0
-}
 
+homeBtn.onclick = () => {
+    location.reload();
+}
