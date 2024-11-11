@@ -37,22 +37,28 @@
             </div>
         </div>        
     </div>
+    
+    <!-- Labels for X and O with icons -->
+    <div class="labels">
+        <p><i class="fas fa-chess-knight"></i><strong>X:</strong> Chess Knight</p>
+        <p><i class="fas fa-sun"></i><strong>O:</strong> Sun</p>
+    </div>
 
-    <!-- Play Board -->
+    <!-- LAYOUT/BOARD -->
     <div class="play-board">
         <div class="details">
             <div class="players">
-                <span class="Xturn"></span>
-                <span class="Oturn"></span>
-                <div class="aiTurn" style="display: none;"></div> <!-- AI Turn Indicator -->
+                <span class="Xturn">X's Turn</span>
+                <span class="Oturn">O's Turn</span>
+                <div class="aiTurn" style="display: none;">AI's Turn</div> <!-- AI Turn Indicator -->
                 <div class="slider"></div>
             </div>
+            
             <div class="timer" style="color: #fff; background-color: #007bff; padding: 10px; border-radius: 5px;">
                 Time left: 5 seconds
             </div>
         </div>
-        
-        <!-- Play Area -->
+        <!-- play area -->
         <div class="play-area">
             <section>
                 <span class="box1"></span>
