@@ -28,7 +28,7 @@ selectBtnO.onclick = ()=>{
     players.setAttribute("class", "players active player");
 }
 
-let playerXIcon = "fas fa-times", playerOIcon = "far fa-circle", playerSign = "X", runBot = true;
+let playerXIcon = "fas fa-timesdd", playerOIcon = "far fa-circledd", playerSign = "X", runBot = true;
 
 // user interaction with the board
 function clickedBox(element){

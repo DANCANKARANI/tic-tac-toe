@@ -8,6 +8,10 @@ const selectBox = document.querySelector(".select-box"),
     resultBox = document.querySelector(".result-box"),
     wonText = resultBox.querySelector(".won-text"),
     replayBtn = resultBox.querySelector("button");
+    // Paths to custom images for X and O
+let playerXIcon = "x-image.png"; // Path to X image
+let playerOIcon = "o-image.png"; // Path to O image
+let playerSign = "X", runBot = true;
 
     Xturn = document.querySelector(".Xturn")
     Oturn = document.querySelector(".Oturn")
@@ -114,9 +118,6 @@ selectBtnO.onclick = () => {
     players.classList.add("active");
 };
 
-let playerXIcon = "fas fa-chess-knight";
-let playerOIcon = "fas fa-sun";
-let playerSign = "X", runBot = true;
 
 // Reference to sounds
 const moveSound = document.getElementById("moveSound");
@@ -163,7 +164,7 @@ function declareWinner(winner) {
 
 function clickedBox(element) {
     element.style.backgroundColor = playerSign === "X" ? "#ffcccc" : "#cceeff";
-    element.innerHTML = `<i class="${playerSign === "X" ? playerXIcon : playerOIcon}"></i>`;
+    element.innerHTML = `<img src="${playerSign === "X" ? playerXIcon : playerOIcon}" alt="${playerSign}" style="width: 100%; height: 100%;">`;
     element.setAttribute("id", playerSign);
     element.style.pointerEvents = "none"; // Disable further clicks on the box
     moveSound.play();
@@ -194,7 +195,7 @@ window.onload = () => {
     startTimer(); // Start timer for the first player
 };
 
-function bot(){
+function bot() {
     let array = [];
     if(runBot){
         playerSign = "O";
@@ -207,12 +208,14 @@ function bot(){
         if(array.length > 0){
             if(players.classList.contains("player")){ 
                 playerSign = "X";
-                allBox[randomBox].innerHTML = `<i class="${playerXIcon}"></i>`;
+                // Insert only the image for player X with size 100%
+                allBox[randomBox].innerHTML = `<img src="${playerXIcon}" alt="Player X" style="width: 100%; height: 100%;">`;
                 allBox[randomBox].setAttribute("id", playerSign);
                 players.classList.add("active"); 
             }
             else{
-                allBox[randomBox].innerHTML = `<i class="${playerOIcon}"></i>`;
+                // Insert only the image for player O with size 100%
+                allBox[randomBox].innerHTML = `<img src="${playerOIcon}" alt="Player O" style="width: 100%; height: 100%;">`;
                 players.classList.remove("active");
                 allBox[randomBox].setAttribute("id", playerSign);
             }
