@@ -88,7 +88,7 @@ replayBtn.addEventListener('click', () => {
     });
     resultBox.classList.remove('show');
     playBoard.classList.add('show');
-    
+    gameEnded=false;
     runBot = true;
     playerSign = "X";
     players.classList.remove("active");
@@ -144,17 +144,7 @@ function startTimer() {
         }
     }, 1000);
    }else{
-    timeRemaining = timeLimit; // Reset time remaining
-    clearInterval(timer); // Clear any existing timer
-    timer = setInterval(() => {
-        timeRemaining++;
-        timerDisplay.textContent = `Time left: ${timeRemaining} seconds`; // Update timer display
-        if (timeRemaining <= 0) {
-            clearInterval(timer);
-            
-            declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
-        }
-    }, 1000);
+   
    }
 }
 
