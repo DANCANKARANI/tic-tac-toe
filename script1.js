@@ -132,19 +132,22 @@ const timerDisplay = document.querySelector('.timer'); // Reference to timer dis
 
 // Function to start the timer
 function startTimer() {
-    if (!gameEnded) {
-        timeRemaining = timeLimit; // Reset time remaining
-        clearInterval(timer); // Clear any existing timer
-        timer = setInterval(() => {
-            timeRemaining--;
-            timerDisplay.textContent = `Time left: ${timeRemaining} seconds`; // Update timer display
-            if (timeRemaining <= 0) {
-                clearInterval(timer);
-                declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
-            }
-        }, 1000);
+    if (!gameEnded){
+     timeRemaining = timeLimit; // Reset time remaining
+     clearInterval(timer); // Clear any existing timer
+     timer = setInterval(() => {
+         timeRemaining--;
+         timerDisplay.textContent = `Time left: ${timeRemaining} seconds`; // Update timer display
+         if (timeRemaining <= 0) {
+             clearInterval(timer);
+             
+             declareWinner(playerSign === "X" ? "O" : "X"); // Declare the other player as the winner
+         }
+     }, 1000);
+    }else{
+    
     }
-}
+ }
 
 // Function to declare the winner and update win counter
 function declareWinner(winner) {
@@ -155,7 +158,7 @@ function declareWinner(winner) {
         playBoard.classList.remove("show");
     }, 700);
     winSound.play();
-    gameEnded = true;
+    gameEnded=true;
     displayWinMessage(winner);
 }
 
@@ -232,40 +235,39 @@ function checkIdSign(val1, val2, val3, val4, sign) {
     return getIdVal(val1) === sign && getIdVal(val2) === sign && getIdVal(val3) === sign && getIdVal(val4) === sign;
 }
 function selectWinner() {
-    // Check for horizontal wins (rows)
+    // Horizontal wins
     if (checkIdSign(1, 2, 3, 4, playerSign) ||
         checkIdSign(5, 6, 7, 8, playerSign) ||
         checkIdSign(9, 10, 11, 12, playerSign) ||
         checkIdSign(13, 14, 15, 16, playerSign)) {
         declareWinner(playerSign);
-        return;
     }
 
-    // Check for vertical wins (columns)
+    // Vertical wins
     if (checkIdSign(1, 5, 9, 13, playerSign) ||
         checkIdSign(2, 6, 10, 14, playerSign) ||
         checkIdSign(3, 7, 11, 15, playerSign) ||
         checkIdSign(4, 8, 12, 16, playerSign)) {
-        declareWinner(playerSign);
-        return;
+            clearInterval(timer);
+            declareWinner(playerSign);
     }
 
-    // Check for diagonal wins
+    // Diagonal wins
     if (checkIdSign(1, 6, 11, 16, playerSign) || checkIdSign(4, 7, 10, 13, playerSign)) {
+        clearInterval(timer);
         declareWinner(playerSign);
         return;
     }
 
-    // If no winner, check for a draw (all boxes filled)
+    // Draw condition
     else if ([...allBox].every(box => box.id)) {
         drawSound.play();
-            playBoard.style.pointerEvents = "none";
-            gameEnded=true;
-            clearInterval(timer);
+        playBoard.style.pointerEvents = "none";
+        gameEnded = true; // Stop the game
+        clearInterval(timer); // Stop the timer
         setTimeout(() => {
             resultBox.classList.add("show");
             playBoard.classList.remove("show");
         }, 700);
     }
 }
-
