@@ -259,6 +259,9 @@ function selectWinner() {
     // If no winner, check for a draw (all boxes filled)
     else if ([...allBox].every(box => box.id)) {
         drawSound.play();
+            playBoard.style.pointerEvents = "none";
+            gameEnded=true;
+            clearInterval(timer);
         setTimeout(() => {
             resultBox.classList.add("show");
             playBoard.classList.remove("show");
