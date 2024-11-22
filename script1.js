@@ -285,3 +285,6 @@ function selectWinner() {
         wonText.innerHTML = "Match has been drawn!";
     }
 }
+function updateWinCounter(){
+
+}
