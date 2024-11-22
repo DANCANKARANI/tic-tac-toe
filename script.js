@@ -4,6 +4,7 @@ const selectBox = document.querySelector(".select-box"),
     selectBtnO = selectBox.querySelector(".options .playerO"),
     playBoard = document.querySelector(".play-board"),
     players = document.querySelector(".players"),
+    winCounter = document.querySelector(".win-counter")
     allBox = document.querySelectorAll("section span"),
     resultBox = document.querySelector(".result-box"),
     wonText = resultBox.querySelector(".won-text"),
@@ -15,6 +16,8 @@ let playerSign = "X", runBot = true;
 
     Xturn = document.querySelector(".Xturn")
     Oturn = document.querySelector(".Oturn")
+    xWin = document.querySelector('x-wins')
+    oWin=document.getElementById('o-wins') 
 
 // Variables to track wins
 let xWins = localStorage.getItem('xWins') ? parseInt(localStorage.getItem('xWins')) : 0;
@@ -38,8 +41,13 @@ selectBtnPvP.onclick = () => {
     selectBox.classList.add("hide");
     playBoard.classList.add("show");
     isPvPMode = true;
-    Xturn.innerHTML = "X's turn";
+    winCounter.style.display = "inline";
+     Xturn.innerHTML = "X's turn";
     Oturn.innerHTML="O's turn"
+
+    // Update the text content for the win counters
+    document.querySelector('p[style="color: green;"] strong').textContent = "X Wins:";
+    document.querySelector('p[style="color: red;"] strong').textContent = "O Wins:";
 };
 
 // Display initial values
@@ -97,6 +105,7 @@ replayBtn.addEventListener('click', () => {
     playerSign = "X";
     players.classList.remove("active");
     playBoard.style.pointerEvents = "auto";
+    startTimer();
 });
 
 // Initialize game on page load
@@ -108,6 +117,8 @@ window.onload = () => {
 // Set player choice to "X" and start game
 selectBtnX.onclick = () => {
     selectBox.classList.add("hide");
+    winCounter.style.display = "inline-block";
+    xWins.innerHTML="X Wins"
     playBoard.classList.add("show");
 };
 
@@ -126,7 +137,7 @@ const drawSound = document.getElementById("drawSound");
 
 // Handle user interaction with the board
 let timer; // Timer variable
-const timeLimit = 10; // 10 seconds for each player
+const timeLimit = 20; // 10 seconds for each player
 let timeRemaining = timeLimit; // Time remaining for the current player's turn
 const timerDisplay = document.querySelector('.timer'); // Reference to timer display
 

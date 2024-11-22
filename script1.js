@@ -2,6 +2,7 @@
 const selectBox = document.querySelector(".select-box"),
     selectBtnX = selectBox.querySelector(".options .playerX"),
     selectBtnO = selectBox.querySelector(".options .playerO"),
+    winCounter = document.querySelector(".win-counter")
     playBoard = document.querySelector(".play-board"),
     players = document.querySelector(".players"),
     allBox = document.querySelectorAll("section span"),
@@ -17,9 +18,9 @@ let playerSign = "X", runBot = true;
 const Xturn = document.querySelector(".Xturn");
 const Oturn = document.querySelector(".Oturn");
 
-// Variables to track wins
-let xWins = localStorage.getItem('xWins') ? parseInt(localStorage.getItem('xWins')) : 0;
-let oWins = localStorage.getItem('oWins') ? parseInt(localStorage.getItem('oWins')) : 0;
+// Variables to track wins with updated names
+let playerXWins = localStorage.getItem('playerXWins') ? parseInt(localStorage.getItem('playerXWins')) : 0;
+let playerOWins = localStorage.getItem('playerOWins') ? parseInt(localStorage.getItem('playerOWins')) : 0;
 let gameEnded = false;
 
 // Get the "Player vs Player" button
@@ -36,41 +37,48 @@ resetCounterBtn.addEventListener('click', resetWinCounter);
 
 // Set PvP mode on button click
 selectBtnPvP.onclick = () => {
-    selectBox.classList.add("hide");
-    playBoard.classList.add("show");
-    isPvPMode = true;
-    Xturn.innerHTML = "X's turn";
-    Oturn.innerHTML = "O's turn";
+    selectBtnPvP.onclick = () => {
+        selectBox.classList.add("hide");
+        playBoard.classList.add("show");
+        isPvPMode = true;
+        winCounter.style.display = "inline";
+         Xturn.innerHTML = "X's turn";
+        Oturn.innerHTML="O's turn"
+    
+        // Update the text content for the win counters
+        document.querySelector('p[style="color: green;"] strong').textContent = "X Wins:";
+        document.querySelector('p[style="color: red;"] strong').textContent = "O Wins:";
+    };
 };
 
 // Display initial values
-document.getElementById('xWins').textContent = xWins;
-document.getElementById('oWins').textContent = oWins;
+document.getElementById('xWins').textContent = playerXWins;
+document.getElementById('oWins').textContent = playerOWins;
 
 // Function to increment and store wins
 function updateWinCounter(winner) {
     if (winner === 'X') {
-        xWins++;
-        localStorage.setItem('xWins', xWins);
+        playerXWins++;
+        localStorage.setItem('playerXWins', playerXWins);
     } else if (winner === 'O') {
-        oWins++;
-        localStorage.setItem('oWins', oWins);
+        playerOWins++;
+        localStorage.setItem('playerOWins', playerOWins);
     }
     displayWinCounter();
 }
 
 // Function to display updated win count
 function displayWinCounter() {
-    document.getElementById('xWins').textContent = xWins;
-    document.getElementById('oWins').textContent = oWins;
+    document.getElementById('xWins').textContent = playerXWins;
+    document.getElementById('oWins').textContent = playerOWins;
 }
 
 // Reset win counters
 function resetWinCounter() {
-    xWins = 0;
-    oWins = 0;
-    localStorage.setItem('xWins', xWins);
-    localStorage.setItem('oWins', oWins);
+    playerXWins = 0;
+    playerOWins = 0;
+    localStorage.setItem('playerXWins', playerXWins);
+    localStorage.setItem('playerOWins', playerOWins);
     displayWinCounter();
 }
 
@@ -98,6 +106,7 @@ replayBtn.addEventListener('click', () => {
     playerSign = "X";
     players.classList.remove("active");
     playBoard.style.pointerEvents = "auto";
+    startTimer();
 });
 
 // Initialize game on page load
@@ -110,6 +119,7 @@ window.onload = () => {
 selectBtnX.onclick = () => {
     selectBox.classList.add("hide");
     playBoard.classList.add("show");
+    winCounter.style.display = "inline-block";
 };
 
 // Set player choice to "O" and start game
@@ -126,7 +136,7 @@ const drawSound = document.getElementById("drawSound");
 
 // Handle user interaction with the board
 let timer; // Timer variable
-const timeLimit = 10; // 10 seconds for each player
+const timeLimit = 20; // 10 seconds for each player
 let timeRemaining = timeLimit; // Time remaining for the current player's turn
 const timerDisplay = document.querySelector('.timer'); // Reference to timer display
 
