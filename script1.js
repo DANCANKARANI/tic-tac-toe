@@ -282,5 +282,6 @@ function selectWinner() {
             resultBox.classList.add("show");
             playBoard.classList.remove("show");
         }, 700);
+        wonText.innerHTML = "Match has been drawn!";
     }
 }
