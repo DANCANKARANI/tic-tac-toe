@@ -125,6 +125,7 @@ selectBtnX.onclick = () => {
 // Set player choice to "O" and start game
 selectBtnO.onclick = () => {
     selectBox.classList.add("hide");
+    winCounter.style.display = "inline-block";
     playBoard.classList.add("show");
     players.classList.add("active");
 };

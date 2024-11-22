@@ -118,13 +118,16 @@ window.onload = () => {
 // Set player choice to "X" and start game
 selectBtnX.onclick = () => {
     selectBox.classList.add("hide");
-    playBoard.classList.add("show");
     winCounter.style.display = "inline-block";
+    xWins.innerHTML="X Wins"
+    playBoard.classList.add("show");
+    
 };
 
 // Set player choice to "O" and start game
 selectBtnO.onclick = () => {
     selectBox.classList.add("hide");
+    winCounter.style.display = "inline-block";
     playBoard.classList.add("show");
     players.classList.add("active");
 };
